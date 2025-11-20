@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Indian Personal Tax Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #fff;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        h1 {
+            color: #343a40;
+            font-weight: 500;
+            font-size: 24px;
+        }
+        
+        .calculator {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #6c757d;
+            box-shadow: 0 0 0 3px rgba(108, 117, 125, 0.1);
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: #343a40;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #495057;
+        }
+        
+        .result {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 18px;
+            color: #343a40;
+        }
+        
+        .info-box {
+            background-color: #e9ecef;
+            border-left: 4px solid #6c757d;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .info-box p {
+            font-size: 14px;
+            color: #495057;
+        }
+        
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 20px 0;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .footer-heart {
+            color: #e74c3c;
+        }
+        
+        .accordion {
+            background-color: #f8f9fa;
+            color: #495057;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: 0.4s;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .accordion:hover {
+            background-color: #e9ecef;
+        }
+        
+        .accordion.active {
+            background-color: #e9ecef;
+        }
+        
+        .accordion i {
+            transition: transform 0.3s;
+        }
+        
+        .accordion.active i {
+            transform: rotate(180deg);
+        }
+        
+        .panel {
+            padding: 0 15px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            border-radius: 0 0 6px 6px;
+            margin-bottom: 20px;
+        }
+        
+        .panel-content {
+            padding: 15px 0;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        .help-text {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+            
+            .calculator {
+                padding: 20px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .form-row .form-group {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-calculator"></i> Advanced Indian Personal Tax Calculator</h1>
+        </header>
+        
+        <div class="calculator">
+            <div class="form-group">
+                <label for="income">Annual Income (₹)</label>
+                <input type="number" id="income" placeholder="Enter your annual income">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="age">Age Group</label>
+                    <select id="age">
+                        <option value="below60">Below 60 years</option>
+                        <option value="60to80">60 to 80 years</option>
+                        <option value="above80">Above 80 years</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="regime">Tax Regime</label>
+                    <select id="regime">
+                        <option value="old">Old Regime</option>
+                        <option value="new">New Regime</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button class="accordion">
+                <span><i class="fas fa-piggy-bank"></i> Investments & Savings</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="form-group">
+                        <label for="section80c">Section 80C Investments (₹)</label>
+                        <input type="number" id="section80c" placeholder="PPF, ELSS, LIC, NSC, etc.">
+                        <div class="help-text">Maximum deduction: ₹1,50,000</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nps">NPS Contribution (₹)</label>
+                        <input type="number" id="nps" placeholder="Additional contribution to NPS">
+                        <div class="help-text">Maximum deduction: ₹50,000 under Section 80CCD(1B)</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="savingsInterest">Interest on Savings Account (₹)</label>
+                        <input type="number" id="savingsInterest" placeholder="Interest from savings account">
+                        <div class="help-text">Maximum deduction: ₹10,000 under Section 80TTA</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="accordion">
+                <span><i class="fas fa-heartbeat"></i> Insurance & Health</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="form-group">
+                        <label for="healthInsuranceSelf">Health Insurance - Self & Family (₹)</label>
+                        <input type="number" id="healthInsuranceSelf" placeholder="Premium for self, spouse, children">
+                        <div class="help-text">Maximum deduction: ₹25,000 under Section 80D</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="healthInsuranceParents">Health Insurance - Parents (₹)</label>
+                        <input type="number" id="healthInsuranceParents" placeholder="Premium for parents">
+                        <div class="help-text">Maximum deduction: ₹50,000 (₹1,00,000 if senior citizens)</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="medicalExpenses">Preventive Health Check-up (₹)</label>
+                        <input type="number" id="medicalExpenses" placeholder="Health check-up expenses">
+                        <div class="help-text">Maximum deduction: ₹5,000 under Section 80D</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="accordion">
+                <span><i class="fas fa-home"></i> Home Loan & HRA</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="form-group">
+                        <label for="homeLoanInterest">Home Loan Interest (₹)</label>
+                        <input type="number" id="homeLoanInterest" placeholder="Interest paid on home loan">
+                        <div class="help-text">Maximum deduction: ₹2,00,000 under Section 24</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="hraExemption">HRA Exemption (₹)</label>
+                        <input type="number" id="hraExemption" placeholder="House Rent Allowance exemption">
+                        <div class="help-text">Based on actual HRA received, rent paid, and salary</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="accordion">
+                <span><i class="fas fa-graduation-cap"></i> Education & Donations</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="form-group">
+                        <label for="educationLoan">Education Loan Interest (₹)</label>
+                        <input type="number" id="educationLoan" placeholder="Interest paid on education loan">
+                        <div class="help-text">Full deduction under Section 80E</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="donations">Donations (₹)</label>
+                        <input type="number" id="donations" placeholder="Donations to approved funds/charities">
+                        <div class="help-text">50% or 100% deduction based on recipient under Section 80G</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="accordion">
+                <span><i class="fas fa-ellipsis-h"></i> Other Deductions</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="form-group">
+                        <label for="otherDeductions">Other Deductions (₹)</label>
+                        <input type="number" id="otherDeductions" placeholder="Any other eligible deductions">
+                        <div class="help-text">Enter any other eligible deductions not covered above</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="calculateTax()">Calculate Tax</button>
+            
+            <div class="result" id="result">
+                <div class="result-item">
+                    <span>Gross Income:</span>
+                    <span id="grossIncome">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Standard Deduction:</span>
+                    <span id="standardDeduction">₹50,000</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Deductions:</span>
+                    <span id="totalDeductions">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Taxable Income:</span>
+                    <span id="taxableIncome">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Tax Amount:</span>
+                    <span id="taxAmount">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Health & Education Cess (4%):</span>
+                    <span id="cessAmount">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Tax Payable:</span>
+                    <span id="totalTax">₹0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <p><i class="fas fa-info-circle"></i> This calculator provides an estimate of your income tax liability based on current Indian tax laws. Actual tax may vary based on specific deductions, exemptions, and other factors. Consult a tax professional for accurate calculations.</p>
+        </div>
+        
+        <footer>
+            Made with <span class="footer-heart">❤️</span> by Sauravhhh
+        </footer>
+    </div>
+
+    <script>
+        // Accordion functionality
+        const acc = document.getElementsByClassName("accordion");
+        for (let i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                const panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        }
+        
+        function calculateTax() {
+            // Get input values
+            const income = parseFloat(document.getElementById('income').value) || 0;
+            const ageGroup = document.getElementById('age').value;
+            const regime = document.getElementById('regime').value;
+            
+            // Get deduction values
+            const section80c = Math.min(parseFloat(document.getElementById('section80c').value) || 0, 150000);
+            const nps = Math.min(parseFloat(document.getElementById('nps').value) || 0, 50000);
+            const savingsInterest = Math.min(parseFloat(document.getElementById('savingsInterest').value) || 0, 10000);
+            const healthInsuranceSelf = Math.min(parseFloat(document.getElementById('healthInsuranceSelf').value) || 0, 25000);
+            const healthInsuranceParents = Math.min(parseFloat(document.getElementById('healthInsuranceParents').value) || 0, 50000);
+            const medicalExpenses = Math.min(parseFloat(document.getElementById('medicalExpenses').value) || 0, 5000);
+            const homeLoanInterest = Math.min(parseFloat(document.getElementById('homeLoanInterest').value) || 0, 200000);
+            const hraExemption = parseFloat(document.getElementById('hraExemption').value) || 0;
+            const educationLoan = parseFloat(document.getElementById('educationLoan').value) || 0;
+            const donations = parseFloat(document.getElementById('donations').value) || 0;
+            const otherDeductions = parseFloat(document.getElementById('otherDeductions').value) || 0;
+            
+            // Calculate total deductions
+            let totalDeductions = 0;
+            
+            // Standard deduction for salaried individuals
+            const standardDeduction = 50000;
+            totalDeductions += standardDeduction;
+            
+            // Apply deductions only in old regime
+            if (regime === 'old') {
+                totalDeductions += section80c;
+                totalDeductions += nps;
+                totalDeductions += savingsInterest;
+                totalDeductions += healthInsuranceSelf;
+                totalDeductions += healthInsuranceParents;
+                totalDeductions += medicalExpenses;
+                totalDeductions += homeLoanInterest;
+                totalDeductions += hraExemption;
+                totalDeductions += educationLoan;
+                totalDeductions += donations;
+                totalDeductions += otherDeductions;
+            }
+            
+            // Calculate taxable income
+            let taxableIncome = Math.max(0, income - totalDeductions);
+            
+            // Calculate tax based on regime and age
+            let tax = 0;
+            
+            if (regime === 'old') {
+                // Old regime tax slabs
+                if (ageGroup === 'below60') {
+                    if (taxableIncome <= 250000) {
+                        tax = 0;
+                    } else if (taxableIncome <= 500000) {
+                        tax = (taxableIncome - 250000) * 0.05;
+                    } else if (taxableIncome <= 1000000) {
+                        tax = 12500 + (taxableIncome - 500000) * 0.20;
+                    } else {
+                        tax = 112500 + (taxableIncome - 1000000) * 0.30;
+                    }
+                } else if (ageGroup === '60to80') {
+                    if (taxableIncome <= 300000) {
+                        tax = 0;
+                    } else if (taxableIncome <= 500000) {
+                        tax = (taxableIncome - 300000) * 0.05;
+                    } else if (taxableIncome <= 1000000) {
+                        tax = 10000 + (taxableIncome - 500000) * 0.20;
+                    } else {
+                        tax = 110000 + (taxableIncome - 1000000) * 0.30;
+                    }
+                } else { // above80
+                    if (taxableIncome <= 500000) {
+                        tax = 0;
+                    } else if (taxableIncome <= 1000000) {
+                        tax = (taxableIncome - 500000) * 0.20;
+                    } else {
+                        tax = 100000 + (taxableIncome - 1000000) * 0.30;
+                    }
+                }
+                
+                // Apply rebate under section 87A
+                if (taxableIncome <= 500000) {
+                    tax = Math.max(0, tax - 12500);
+                }
+            } else {
+                // New regime tax slabs (same for all age groups)
+                if (taxableIncome <= 250000) {
+                    tax = 0;
+                } else if (taxableIncome <= 500000) {
+                    tax = (taxableIncome - 250000) * 0.05;
+                } else if (taxableIncome <= 750000) {
+                    tax = 12500 + (taxableIncome - 500000) * 0.10;
+                } else if (taxableIncome <= 1000000) {
+                    tax = 37500 + (taxableIncome - 750000) * 0.15;
+            } else if (taxableIncome <= 1250000) {
+                    tax = 75000 + (taxableIncome - 1000000) * 0.20;
+                } else if (taxableIncome <= 1500000) {
+                    tax = 125000 + (taxableIncome - 1250000) * 0.25;
+                } else {
+                    tax = 187500 + (taxableIncome - 1500000) * 0.30;
+                }
+                
+                // Apply rebate under section 87A
+                if (taxableIncome <= 700000) {
+                    tax = Math.max(0, tax - 25000);
+                }
+      }
+
+      // Calculate cess (4%)
+            const cess = tax * 0.04;
+            const totalTax = tax + cess;
+            
+            // Display results
+            document.getElementById('grossIncome').textContent = '₹' + income.toLocaleString('en-IN');
+            document.getElementById('standardDeduction').textContent = '₹' + standardDeduction.toLocaleString('en-IN');
+            document.getElementById('totalDeductions').textContent = '₹' + totalDeductions.toLocaleString('en-IN');
+            document.getElementById('taxableIncome').textContent = '₹' + taxableIncome.toLocaleString('en-IN');
+            document.getElementById('taxAmount').textContent = '₹' + tax.toLocaleString('en-IN', {maximumFractionDigits: 2});
+            document.getElementById('cessAmount').textContent = '₹' + cess.toLocaleString('en-IN', {maximumFractionDigits: 2});
+            document.getElementById('totalTax').textContent = '₹' + totalTax.toLocaleString('en-IN', {maximumFractionDigits: 2});
+            
+            // Show result section
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
